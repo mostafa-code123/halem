@@ -570,7 +570,7 @@ body.revealed .card > .btn       { opacity: 1; transform: translateY(0); transit
 }
 
 .message.open {
-  max-height: 900px;
+  max-height: 1400px;
   opacity: 1;
   margin-top: 28px;
 }
@@ -1267,31 +1267,51 @@ candleGroup.addEventListener('click', () => {
   launchFireworks(3);
 });
 
+/* ============================================================
+   ★★★ رسالة عيد الميلاد — النص الرئيسي ★★★
+   ============================================================ */
+const birthdayMessage =
+  'كل عام وانتي بألف خير يا حليمة 🤍🎂 ' +
+  'إن شاء الله تكون سنة مليانة فرح ونجاح وأيام حلوة، ' +
+  'وتحققي فيها كل إشي بتتمنيه، ' +
+  'وأتمنى تضل ضحكتك ما تفارقك وتشوفي كل الخير والسعادة بحياتك، ' +
+  'وعقبال سنين كتير حلوة عليكي 🤍';
+
 const btn = document.getElementById('btn');
 const message = document.getElementById('message');
 const typedText = document.getElementById('typedText');
-const birthdayMessage = 'كل عام وأنتِ أجمل حكاية، وأطيب قلب. أتمنى لكِ سنة مليئة بالفرح والنجاح وتحقيق كل الأمنيات. عيد ميلاد سعيد يا حليمة!';
 let typingTimer;
+let typingDone = false;
+
 btn.addEventListener('click', () => {
   message.classList.add('open');
+
+  /* لا نعيد الكتابة إذا كانت الرسالة ظاهرة بالكامل */
+  if (typingDone) return;
   btn.disabled = true;
+
+  /* Array.from للحفاظ على الإيموجي كوحدة واحدة */
+  const chars = Array.from(birthdayMessage);
   let index = 0;
   typedText.textContent = '';
+
   const cursor = document.createElement('span');
   cursor.className = 'msg-cursor';
   typedText.appendChild(cursor);
 
   clearInterval(typingTimer);
   typingTimer = setInterval(() => {
-    if (index >= birthdayMessage.length) {
+    if (index >= chars.length) {
       clearInterval(typingTimer);
       cursor.remove();
+      typingDone = true;
       btn.disabled = false;
       return;
     }
-    cursor.before(document.createTextNode(birthdayMessage[index]));
+    cursor.before(document.createTextNode(chars[index]));
     index++;
-  }, 55);
+  }, 45);
+
   playChime();
   launchFireworks(5);
 });
